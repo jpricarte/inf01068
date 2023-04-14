@@ -118,10 +118,12 @@ void change_cnf_var(Cnf& cnf_instance, int old_var, int new_var) {
 Cnf merge_cnf_instances(Cnf& instance_1, Cnf& instance_2) {
     Cnf new_instance = Cnf {instance_1.n_vars + instance_2.n_vars, 
                             instance_1.n_clauses + instance_2.n_clauses, 
-                            instance_1.clauses, 
+                            instance_1.clauses,
+                            instance_1.inputs,
                             instance_1.outputs
                             };
     new_instance.clauses.insert(new_instance.clauses.end(), instance_2.clauses.begin(), instance_2.clauses.end());
+    new_instance.inputs.insert(new_instance.inputs.end(), instance_2.inputs.begin(), instance_2.inputs.end());
     new_instance.outputs.insert(new_instance.outputs.end(), instance_2.outputs.begin(), instance_2.outputs.end());
     return new_instance;
 }

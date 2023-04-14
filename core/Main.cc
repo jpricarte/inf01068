@@ -29,14 +29,16 @@ int main(int argc, char** argv) {
         cnf_instance.n_clauses += 2;
     }
     for (int i=0; i<int(cnf_instance_true.outputs.size()); i++) {
-        cnf_instance.n_vars++;
-        cout << "XOR OUTPUT: " << cnf_instance.n_vars << endl;
         auto xor_clauses = create_xor_clauses(abs(cnf_instance_true.outputs[i]), abs(cnf_instance_false.outputs[i]), cnf_instance.n_vars);
         for (auto clause : xor_clauses) {
             cnf_instance.clauses.push_back(clause);
         }
+        cnf_instance.n_vars++;
+        cout << "XOR OUTPUT: " << cnf_instance.n_vars << endl;
         cnf_instance.n_clauses += 4;
     }
+    cout << locked_input_index << " " << cnf_instance_true.inputs[locked_input_index] << endl;
+
     cnf_instance.clauses.push_back(CnfClause{{cnf_instance_true.inputs[locked_input_index]}});
     cnf_instance.clauses.push_back(CnfClause{{-cnf_instance_false.inputs[locked_input_index]}});
     cnf_instance.n_clauses += 2;
@@ -62,11 +64,14 @@ int main(int argc, char** argv) {
     bool ret = solver.solve();
     cout << (ret == true ? "// SATISFIABLE" : "// UNSATISFIABLE") << endl;
     
-    for (int i=0; i<cnf_instance.n_vars; i++) {
-        auto var_value = solver.model[i];
-        cout << i+1 << " = " << ( var_value == l_True ? "True" : var_value == l_False ? "False" : "Undeterminated") << endl;
+    if (ret)
+        for (int i=0; i<cnf_instance.n_vars; i++) {
+            auto var_value = solver.model[i];
+            cout << i+1 << " = " << ( var_value == l_True ? "True" : var_value == l_False ? "False" : "Undeterminated") << endl;
+        }
+    else {
+        cout << cnf_to_file_content(cnf_instance) << endl;
     }
-
 
 
     return 0;
