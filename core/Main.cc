@@ -35,7 +35,8 @@ int main(int argc, char** argv) {
         }
         cnf_instance.n_vars++;
         cout << "XOR OUTPUT: " << cnf_instance.n_vars << endl;
-        cnf_instance.n_clauses += 4;
+        cnf_instance.clauses.push_back(CnfClause{{cnf_instance.n_vars}});
+        cnf_instance.n_clauses += 5;
     }
     cout << locked_input_index << " " << cnf_instance_true.inputs[locked_input_index] << endl;
 
